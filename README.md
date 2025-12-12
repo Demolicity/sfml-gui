@@ -1,0 +1,88 @@
+
+<h1 align="center">SFML-GUI</h1>
+<h3 align="center"> A Fast Retained-Mode Graphical User Interface Library for SFML 3 written in C++ </h3>
+
+![DEMO IMAGE](/github-assets/sfml-gui-demo.gif/)
+
+Note: I've rewritten the entire library from scratch for SFML 3.0, this new version is much faster and way easier to use. If you'd like to use the original version, I've archived it on a separate branch.
+
+## About the project
+SFML-GUI is a *Retained Mode* GUI, Its fast, extremely simple to use and it just works.
+It enables fast iterations and quick GUI design, so you can spend more time on your game logic, and less on temporary debugging UI.
+
+## Performance
+*SFML-GUI 2* is exponentially faster than the previous version. Using the example below, rendering just the GUI takes *~0.2ms* on my system. This comes with changes how we handle the state of the GUI, since it is a *Retained Mode* GUI, we dont need to reconstruct the UI every single frame.
+
+<h1></h1>
+
+Currently sfml-gui Supports the following widgets.
+
+Labels | Check Boxes | List Boxes | Sliders | Buttons | Input Boxes |
+-------|-------------|------------|---------|---------|-------------|
+
+<h1> Creating a GUI has never been easier! </h1>
+
+The Following code showcases how some widgets can be created, and used.
+```c++
+int main() {
+    SFGUI::SFMLGUI gui(window, "SFML-GUI Example");
+    SFGUI::Button button("This is a button");
+    SFGUI::Label label ("Here is a label");
+
+    float rotation = 0;
+    SFGUI::Slider<float> slider(&rotation, "Rotation", 0, 360);
+
+    sf::Vector2f pos = sf::Vector2f(650, 340);
+    SFGUI::Slider2<float> slider2(&pos.x, &pos.y, "Position", 0, 1000);
+    
+    int currentItem = 1;
+    std::string items[] = {"Rectangle", "Circle", "Triangle", "Hexagon", "Octogon"};
+    SFGUI::Listbox listbox("Items List", &currentItem, items, 5);
+
+    gui.Add(button); gui.Add(label); gui.Add(slider); gui.Add(slider2); gui.Add(listbox);
+
+    while (window.isOpen())
+    {
+        while (const std::optional event = window.pollEvents())
+        {
+            // Do SFML Event Loop stuff
+            gui.pollEvents(*event);
+        }
+        // Main SFML Draw Loop
+        gui.Update();
+        if (button.isClicked())
+            label.setText("Just clicked that button!"); 
+        gui.Draw();
+    }
+}
+```
+<h2> Output </h2>
+
+![DEMO GIF](/github-assets/sfml-gui-example.gif/)
+
+<hr></hr>
+
+## Using SFML-GUI in your projects
+To use SFML-GUI in your project:
+*   Clone the repository ```git clone https://github.com/clearlyyy/sfml-gui.git ```
+*   Take the ```src/sfml-gui``` folder, place it somewhere in your codebase. 
+*   Now just include ```#include "sfml-gui/gui.hpp"```: 
+*   And for any widget you'd like to use just include it, e.g., ```#include "sfml-gui/widgets/button.hpp"```
+* Next take the ```src/sfml-gui-assets``` folder and place it in the same directory as your compiled executable.
+* And your ready to go. 
+
+## Customization
+There are some customization options in ```gui.hpp```, changing these settings dont guarantee the final result to look nice, but you can play around with it and make it fit your needs.
+
+To learn how to make custom widgets, I've written a guide at [Create your own Widgets](/HOW_TO_CREATE_WIDGET.md/) 
+
+---
+
+If you like this project, check out [sfml-console](https://github.com/clearlyyy/sfml-console), You might like that too.
+
+This project is inspired by dear imgui, i recommend checking it out:
+https://github.com/ocornut/imgui
+
+
+
+
